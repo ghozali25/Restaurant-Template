@@ -126,23 +126,23 @@ export default function Home() {
       </div>
     </section>
 
-    <section id="special" className="py-20 bg-[#1a1a1a] overflow-hidden">
-      <div className="max-w-6xl mx-auto px-4 grid md:grid-cols-2 items-center gap-8">
-        <div data-aos="fade-right" className="text-white">
-          <p className="text-[#f6a623] uppercase tracking-[3px] font-bold text-xs">Limited Time Offer</p>
+    <section id="special" className="py-20 bg-[#fff8f0] overflow-hidden relative">
+      <div className="hs hs1"></div>
+      <div className="hs hs2"></div>
+      <div className="max-w-6xl mx-auto px-4 grid md:grid-cols-2 items-center gap-8 relative z-10">
+        <div data-aos="fade-right" className="text-[#1a1a1a]">
+          <p className="text-[#e8281a] uppercase tracking-[3px] font-bold text-xs">Limited Time Offer</p>
           <h2 className="font-display text-4xl md:text-5xl font-black mt-3">Get 30% Off Our Signature Burger Meal</h2>
-          <p className="text-white/70 mt-5 leading-7">Don&apos;t miss our weekend special — grab our mouthwatering signature burger meal while offer lasts.</p>
+          <p className="text-neutral-500 mt-5 leading-7">Don&apos;t miss our weekend special — grab our mouthwatering signature burger meal while offer lasts.</p>
           <div className="mt-7 flex gap-4 items-center">
-            <span className="font-display font-black text-4xl text-[#f6a623]">$17.49</span>
-            <span className="text-white/50 line-through">$24.99</span>
-            <Link href="#menu" className="btn-red">Order Now</Link>
+            <span className="font-display font-black text-4xl text-[#e8281a]">$17.49</span>
+            <span className="text-neutral-400 line-through text-lg">$24.99</span>
+            <Link href="#menu" className="btn-red ml-4">Order Now</Link>
           </div>
         </div>
         <div data-aos="fade-left" className="relative flex items-center justify-center min-h-[380px]">
           <div className="offcircle">
-            <div className="offcircle-inner">
-              <img src={image('off-img.jpg')} alt="Special Burger" />
-            </div>
+            <img src={image('off-img.jpg')} alt="Special Burger" />
             <div className="fcard fc1">
               <div className="fcoi r"><i className="fas fa-fire"></i></div>
               <div><span className="fcnum">30% OFF</span><span className="fcsm">Limited deal</span></div>
