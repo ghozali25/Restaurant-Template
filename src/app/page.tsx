@@ -126,7 +126,35 @@ export default function Home() {
       </div>
     </section>
 
-    <section id="special" className="py-20 bg-[#1a1a1a] overflow-hidden"><div className="max-w-6xl mx-auto px-4 grid md:grid-cols-2 items-center gap-8"><div data-aos="fade-right" className="text-white"><p className="text-[#f6a623] uppercase tracking-[3px] font-bold text-xs">Limited Time Offer</p><h2 className="font-display text-4xl md:text-5xl font-black mt-3">Get 30% Off Our Signature Burger Meal</h2><p className="text-white/70 mt-5 leading-7">Don&apos;t miss our weekend special — grab our mouthwatering signature burger meal while offer lasts.</p><div className="mt-7 flex gap-4 items-center"><span className="font-display font-black text-4xl text-[#f6a623]">$17.49</span><span className="text-white/50 line-through">$24.99</span><Link href="#menu" className="bg-[#e8281a] font-semibold text-sm px-5 py-3 rounded-full">Order Now</Link></div></div><div data-aos="fade-left" className="relative"><img src={image('off-img.jpg')} alt="Special Burger" className="max-h-[350px] mx-auto drop-shadow-2xl animate-float" /></div></div></section>
+    <section id="special" className="py-20 bg-[#1a1a1a] overflow-hidden">
+      <div className="max-w-6xl mx-auto px-4 grid md:grid-cols-2 items-center gap-8">
+        <div data-aos="fade-right" className="text-white">
+          <p className="text-[#f6a623] uppercase tracking-[3px] font-bold text-xs">Limited Time Offer</p>
+          <h2 className="font-display text-4xl md:text-5xl font-black mt-3">Get 30% Off Our Signature Burger Meal</h2>
+          <p className="text-white/70 mt-5 leading-7">Don&apos;t miss our weekend special — grab our mouthwatering signature burger meal while offer lasts.</p>
+          <div className="mt-7 flex gap-4 items-center">
+            <span className="font-display font-black text-4xl text-[#f6a623]">$17.49</span>
+            <span className="text-white/50 line-through">$24.99</span>
+            <Link href="#menu" className="btn-red">Order Now</Link>
+          </div>
+        </div>
+        <div data-aos="fade-left" className="relative flex items-center justify-center min-h-[380px]">
+          <div className="offcircle">
+            <div className="offcircle-inner">
+              <img src={image('off-img.jpg')} alt="Special Burger" />
+            </div>
+            <div className="fcard fc1">
+              <div className="fcoi r"><i className="fas fa-fire"></i></div>
+              <div><span className="fcnum">30% OFF</span><span className="fcsm">Limited deal</span></div>
+            </div>
+            <div className="fcard fc2">
+              <div className="fcoi y"><i className="fas fa-star"></i></div>
+              <div><span className="fcnum">Combo</span><span className="fcsm">Meal deal</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
     <section id="gallery" className="py-24 bg-[#fff8f0]"><div className="max-w-7xl mx-auto px-4"><SectionTitle eyebrow="Food Showcase" title="Let&apos;s See Our Fast Food" /><div className="grid grid-cols-2 md:grid-cols-4 gap-4">{['portfolio/work1.jpg','portfolio/work2.jpg','portfolio/work3.jpg','portfolio/work4.jpg','portfolio/work5.jpg','menu/6.jpg','about2.jpg','menu/4.jpg'].map((src,i)=><div key={src} data-aos="fade-up" className={`overflow-hidden rounded-xl group ${i===0||i===4?'md:col-span-2':''}`}><img src={image(src)} alt="Sarab food" className="w-full h-48 md:h-60 object-cover group-hover:scale-110 transition duration-500" /></div>)}</div></div></section>
 

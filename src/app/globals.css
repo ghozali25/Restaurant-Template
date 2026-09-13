@@ -82,6 +82,37 @@ body {
 @media (max-width: 576px) { .hcircle { width: 300px; height: 300px; } }
 .hcircle img { width: 90%; height: 90%; object-fit: cover; border-radius: 50%; animation: fltimg 5s ease-in-out infinite; }
 
+/* Offer section dark themed circle */
+.offcircle {
+  width: 360px;
+  height: 360px;
+  border-radius: 50%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+.offcircle-inner {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 5px solid rgba(246, 166, 35, 0.25);
+  box-shadow: 0 0 50px rgba(246, 166, 35, 0.2), 0 20px 60px rgba(0,0,0,0.6);
+  background: #222;
+}
+.offcircle-inner img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  animation: fltimg 5s ease-in-out infinite;
+}
+@media (max-width: 576px) {
+  .offcircle { width: 280px; height: 280px; }
+}
+
 .fcard { position: absolute; background: #fff; border-radius: 18px; padding: 10px 15px; box-shadow: rgba(0, 0, 0, 0.08) 0px 6px 30px; display: flex; align-items: center; gap: 9px; z-index: 10; }
 .fcard.fc1 { top: 55px; left: -15px; animation: fltc 4s ease-in-out infinite; }
 .fcard.fc2 { bottom: 75px; right: -25px; animation: fltc 4s ease-in-out infinite 1.5s; }
@@ -99,6 +130,10 @@ body {
 
 @keyframes float { 0%,100% { transform: translateY(0) rotate(-2deg); } 50% { transform: translateY(-12px) rotate(2deg); } }
 .animate-float { animation: float 5s ease-in-out infinite; }
+
+/* Offer section image hover */
+#special img { transition: transform 0.5s ease, box-shadow 0.5s ease; }
+#special .group:hover img { transform: scale(1.08); box-shadow: 0 20px 50px rgba(232,40,26,0.25); }
 
 /* Offer section image hover */
 #special img { transition: transform 0.5s ease, box-shadow 0.5s ease; }

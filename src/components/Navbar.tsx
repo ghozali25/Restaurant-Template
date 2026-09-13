@@ -9,6 +9,7 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [activeLink, setActiveLink] = useState('home');
   const [scrolled, setScrolled] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -40,7 +41,7 @@ export default function Navbar() {
 
           {/* Desktop Nav Links */}
           <div className="hidden lg:flex items-center space-x-1 font-medium text-sm text-[#333]">
-            <Link href="/" onClick={() => setActiveLink('home')} className={`nav-link ${activeLink === 'home' ? 'active' : ''}`}>
+            <Link href="/" onClick={() => setActiveLink('home')} className={`nav-link ${pathname === '/' ? 'active' : ''}`}>
               Home
             </Link>
             <Link href="/#menu" onClick={() => setActiveLink('menu')} className={`nav-link ${activeLink === 'menu' ? 'active' : ''}`}>
