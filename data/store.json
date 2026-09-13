@@ -1,0 +1,16 @@
+{
+  "config": {
+    "url": "",
+    "db": "",
+    "username": "",
+    "apiKey": ""
+  },
+  "products": [],
+  "content": {
+    "heroTitle": "Delicious & Fast Food for Every Moment",
+    "heroSubtitle": "Experience bold flavors crafted from premium ingredients.",
+    "promoTitle": "30% Off Signature Burger Combo",
+    "promoPrice": 17.49,
+    "promoOriginalPrice": 24.99
+  }
+}

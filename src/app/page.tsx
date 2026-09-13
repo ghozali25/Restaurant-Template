@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Clock, Leaf, Medal, Play, Star, Truck, Utensils } from 'lucide-react';
 import TopBar from '@/components/TopBar';
@@ -9,12 +9,19 @@ import Footer from '@/components/Footer';
 import SectionTitle from '@/components/SectionTitle';
 import AOSInit from '@/components/AOSInit';
 
-const image = (file: string) => `https://themewagon.github.io/sarab/img/${file}`;
+const image = (file: string) => file.startsWith('http') || file.startsWith('/') ? file : `https://themewagon.github.io/sarab/img/${file}`;
 
 export default function Home() {
   const [activeFilter, setActiveFilter] = useState('All');
+  const [dbProducts, setDbProducts] = useState<any[]>([]);
+  const [siteContent, setSiteContent] = useState<any>(null);
 
-  const menuItems = [
+  useEffect(() => {
+    fetch('/api/products').then(r => r.json()).then(d => { if (Array.isArray(d) && d.length > 0) setDbProducts(d); });
+    fetch('/api/admin/pages').then(r => r.json()).then(setSiteContent);
+  }, []);
+
+  const defaultMenuItems = [
     { cat: 'Burgers', name: 'Classic Smash Burger', desc: 'Double smashed patty, cheddar, caramelized onions, pickles & special sauce', price: '$14.99', old: '$18.99', img: 'menu/1.jpg', badge: 'Hot', stars: 128 },
     { cat: 'Pizza', name: 'Margherita Royale', desc: 'San Marzano tomatoes, buffalo mozzarella, basil & truffle oil on sourdough', price: '$19.99', old: '$24.99', img: 'menu/2.jpg', badge: 'New', stars: 95 },
     { cat: 'Chicken', name: 'Nashville Hot Chicken', desc: 'Crispy fried chicken in fiery Nashville spice blend with honey drizzle', price: '$12.99', old: '$16.99', img: 'menu/3.jpg', badge: 'Best Seller', stars: 210 },
@@ -22,6 +29,19 @@ export default function Home() {
     { cat: 'Desserts', name: 'Nutella Lava Cake', desc: 'Molten chocolate cake with Nutella center, vanilla ice cream & caramel', price: '$8.99', old: '$11.99', img: 'menu/5.jpg', badge: 'New', stars: 56 },
     { cat: 'Pasta', name: 'Truffle Mushroom Pasta', desc: 'Al dente tagliatelle, wild mushrooms, black truffle, parmesan & thyme', price: '$16.99', img: 'menu/6.jpg', badge: "Chef's Pick", stars: 88 }
   ];
+
+  const menuItems = dbProducts.length > 0
+    ? dbProducts.filter(p => p.active !== false).map(p => ({
+        cat: p.category || 'Burgers',
+        name: p.name,
+        desc: p.description || 'Fresh & delicious meal prepared with quality ingredients.',
+        price: `$${p.price.toFixed(2)}`,
+        old: undefined as string | undefined,
+        img: p.image || 'menu/1.jpg',
+        badge: undefined as string | undefined,
+        stars: 100
+      }))
+    : defaultMenuItems;
 
   const filteredItems = activeFilter === 'All' ? menuItems : menuItems.filter(item => item.cat.toLowerCase() === activeFilter.toLowerCase());
   return <main className="bg-white">
@@ -38,8 +58,10 @@ export default function Home() {
             <div className="hbi"><i className="fas fa-star"></i></div>
             <span>#1 Rated Fast Food Restaurant in New York</span>
           </div>
-          <h1 className="font-display text-[#1a1a1a] font-black text-5xl sm:text-6xl lg:text-7xl leading-[1.08] max-w-xl">Delicious <span className="hl">Fast Food</span><br />for Every Moment</h1>
-          <p className="hdesc">Experience bold flavors crafted from premium ingredients. From crispy burgers to gourmet pizzas — every bite is an adventure worth savoring.</p>
+          <h1 className="font-display text-[#1a1a1a] font-black text-5xl sm:text-6xl lg:text-7xl leading-[1.08] max-w-xl">
+            {siteContent?.heroTitle ? siteContent.heroTitle : <>Delicious <span className="hl">Fast Food</span><br />for Every Moment</>}
+          </h1>
+          <p className="hdesc">{siteContent?.heroSubtitle || "Experience bold flavors crafted from premium ingredients. From crispy burgers to gourmet pizzas — every bite is an adventure worth savoring."}</p>
           <div className="flex gap-4 flex-wrap mt-8">
             <Link href="#menu" className="btn-red"><i className="fas fa-utensils"></i> Explore Menu</Link>
             <a href="https://www.youtube.com/watch?v=RXv_uIN6e-Y" target="_blank" className="btn-play">
@@ -75,7 +97,7 @@ export default function Home() {
 
     <section id="category" className="py-24 bg-white"><div className="max-w-7xl mx-auto px-4"><SectionTitle eyebrow="What We Offer" title="Browse by Category" description="From sizzling burgers to exotic world cuisines — find your favourite in our menu" /><div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">{['All Items','Burgers','Pizza','Fried Chicken','Wraps','Desserts'].map((title,i) => <Link href="#menu" key={title} data-aos="fade-up" className="group relative h-48 rounded-2xl overflow-hidden shadow-sm" style={{transitionDelay:`${i * 70}ms`}}><img src={image(['category/1.jpg','category/2.jpg','category/3.jpg','category/4.jpg','category/5.jpg','category/6.jpg'][i])} alt={title} className="w-full h-full object-cover group-hover:scale-110 transition duration-500" /><div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/5"></div><div className="absolute left-4 bottom-4 text-white"><h3 className="font-display font-bold text-xl">{title}</h3><small className="text-white/75">{['99 items','24 items','18 items','15 items','12 items','20 items'][i]}</small></div></Link>)}</div></div></section>
 
-    <section id="about" className="py-24 bg-[#fff8f0]"><div className="max-w-7xl mx-auto px-4 grid lg:grid-cols-2 gap-14 items-center"><div data-aos="fade-right" className="relative"><img src={image('about1.jpg')} alt="Restaurant" className="rounded-2xl shadow-xl w-full" /><div className="absolute -bottom-6 -right-2 sm:right-8 bg-[#e8281a] text-white p-5 rounded-xl flex gap-3 items-center shadow-lg"><b className="font-display text-4xl">12+</b><span className="text-sm">Years of<br/>Excellence</span></div></div><div data-aos="fade-left"><p className="text-[#e8281a] uppercase tracking-[3px] text-xs font-bold mb-3">Our Story</p><h2 className="font-display text-4xl md:text-5xl font-black text-[#1a1a1a] leading-tight">We Invite You to Visit Our Food Restaurant</h2><p className="text-neutral-500 leading-7 mt-6">Founded in 2012, Sarab began as a small corner joint with a big dream — to serve food that brings people together. Today we&apos;re proud to serve thousands of happy customers every week with same passion that started it all.</p><div className="space-y-5 mt-8">{[[Leaf,'100% Fresh Ingredients','We source locally and sustainably. Every ingredient is hand-picked daily for maximum freshness.'],[Medal,'Award-Winning Recipes','Our signature recipes have won national culinary awards 5 years in a row.'],[Truck,'Lightning-Fast Delivery','Hot, fresh food at your door in under 25 minutes.']].map(([Icon,title,text]) => {const Component=Icon as typeof Leaf; return <div key={title as string} className="flex gap-4"><span className="w-11 h-11 rounded-full bg-white text-[#e8281a] grid place-items-center shadow-sm flex-none"><Component size={20}/></span><div><h3 className="font-semibold text-[#1a1a1a]">{title as string}</h3><p className="text-sm text-neutral-500 mt-1">{text as string}</p></div></div>})}</div><Link href="/about" className="inline-block mt-8 bg-[#e8281a] text-white font-semibold px-6 py-3 rounded-full text-sm hover:bg-[#c91d13] transition">Discover Our Story</Link></div></div></section>
+    <section id="about" className="py-24 bg-[#fff8f0]"><div className="max-w-7xl mx-auto px-4 grid lg:grid-cols-2 gap-14 items-center"><div data-aos="fade-right" className="relative"><img src={image('about1.jpg')} alt="Restaurant" className="rounded-2xl shadow-xl w-full" /><div className="absolute -bottom-6 -right-2 sm:right-8 bg-[#e8281a] text-white p-5 rounded-xl flex gap-3 items-center shadow-lg"><b className="font-display text-4xl">12+</b><span className="text-sm">Years of<br/>Excellence</span></div></div><div data-aos="fade-left"><p className="text-[#e8281a] uppercase tracking-[3px] text-xs font-bold mb-3">Our Story</p><h2 className="font-display text-4xl md:text-5xl font-black text-[#1a1a1a] leading-tight">We Invite You to Visit Our Food Restaurant</h2><p className="text-neutral-500 leading-7 mt-6">{siteContent?.aboutHistory || "Founded in 2012, Sarab began as a small corner joint with a big dream — to serve food that brings people together. Today we're proud to serve thousands of happy customers every week with same passion that started it all."}</p><div className="space-y-5 mt-8">{[[Leaf,'100% Fresh Ingredients','We source locally and sustainably. Every ingredient is hand-picked daily for maximum freshness.'],[Medal,'Award-Winning Recipes','Our signature recipes have won national culinary awards 5 years in a row.'],[Truck,'Lightning-Fast Delivery','Hot, fresh food at your door in under 25 minutes.']].map(([Icon,title,text]) => {const Component=Icon as typeof Leaf; return <div key={title as string} className="flex gap-4"><span className="w-11 h-11 rounded-full bg-white text-[#e8281a] grid place-items-center shadow-sm flex-none"><Component size={20}/></span><div><h3 className="font-semibold text-[#1a1a1a]">{title as string}</h3><p className="text-sm text-neutral-500 mt-1">{text as string}</p></div></div>})}</div><Link href="/about" className="inline-block mt-8 bg-[#e8281a] text-white font-semibold px-6 py-3 rounded-full text-sm hover:bg-[#c91d13] transition">Discover Our Story</Link></div></div></section>
 
     <section id="menu" className="py-24">
       <div className="max-w-7xl mx-auto px-4">
@@ -132,11 +154,11 @@ export default function Home() {
       <div className="max-w-6xl mx-auto px-4 grid md:grid-cols-2 items-center gap-8 relative z-10">
         <div data-aos="fade-right" className="text-[#1a1a1a]">
           <p className="text-[#e8281a] uppercase tracking-[3px] font-bold text-xs">Limited Time Offer</p>
-          <h2 className="font-display text-4xl md:text-5xl font-black mt-3">Get 30% Off Our Signature Burger Meal</h2>
-          <p className="text-neutral-500 mt-5 leading-7">Don&apos;t miss our weekend special — grab our mouthwatering signature burger meal while offer lasts.</p>
+          <h2 className="font-display text-4xl md:text-5xl font-black mt-3">{siteContent?.promoTitle || "Get 30% Off Our Signature Burger Meal"}</h2>
+          <p className="text-neutral-500 mt-5 leading-7">{siteContent?.promoDesc || "Don't miss our weekend special — grab our mouthwatering signature burger meal while offer lasts."}</p>
           <div className="mt-7 flex gap-4 items-center">
-            <span className="font-display font-black text-4xl text-[#e8281a]">$17.49</span>
-            <span className="text-neutral-400 line-through text-lg">$24.99</span>
+            <span className="font-display font-black text-4xl text-[#e8281a]">{siteContent?.promoPrice !== undefined ? siteContent.promoPrice : '17.49'}</span>
+            <span className="text-neutral-400 line-through text-lg">${siteContent?.promoOriginalPrice !== undefined ? siteContent.promoOriginalPrice : '24.99'}</span>
             <Link href="#menu" className="btn-red ml-4">Order Now</Link>
           </div>
         </div>
@@ -223,9 +245,9 @@ export default function Home() {
         <SectionTitle eyebrow="Get In Touch" title="Contact Us" description="Have a question, feedback, or want to plan a special event? We&apos;d love to hear from you." />
         <div className="grid md:grid-cols-3 gap-6">
           {([
-            ['fa-location-dot','Visit Us','42 Flavor Street, Manhattan, NY 10001'],
-            ['fa-phone','Call Us','+1 (800) 123-4567'],
-            ['fa-envelope','Email Us','hello@sarabfood.com'],
+            ['fa-location-dot','Visit Us', siteContent?.contactAddress || '42 Flavor Street, Manhattan, NY 10001'],
+            ['fa-phone','Call Us', siteContent?.contactPhone || '+1 (800) 123-4567'],
+            ['fa-envelope','Email Us', siteContent?.contactEmail || 'hello@sarabfood.com'],
           ] as [string,string,string][]).map(([icon,title,text]) => 
             <div key={title} data-aos="fade-up" className="p-7 rounded-2xl bg-[#fff8f0] text-center">
               <span className="w-12 h-12 bg-[#e8281a] text-white rounded-full inline-grid place-items-center">
